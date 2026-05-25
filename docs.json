@@ -1,0 +1,34 @@
+[
+  {
+    "title": "Reset Password",
+    "content": "Users can reset their password from Settings > Security. If you've forgotten your password, click 'Forgot Password' on the login screen and follow the instructions sent to your registered email. Password resets require a minimum of 8 characters, including one uppercase letter and one number."
+  },
+  {
+    "title": "Subscription Plans",
+    "content": "We offer three subscription plans: Basic, Pro, and Enterprise. The Basic plan is free and includes limited access to core features. The Pro plan costs $19/month and offers advanced analytics and priority support. The Enterprise plan is customizable and includes dedicated account management."
+  },
+  {
+    "title": "Two-Factor Authentication (2FA)",
+    "content": "To enhance security, we recommend enabling 2FA. You can find this option under Settings > Security > Two-Factor Authentication. We support authenticator apps like Google Authenticator and Authy, as well as SMS-based verification."
+  },
+  {
+    "title": "API Documentation",
+    "content": "Our API allows you to integrate our platform into your own applications. You can generate API keys from the Developer Dashboard. We use RESTful architecture and return data in JSON format. Rate limits apply based on your subscription plan."
+  },
+  {
+    "title": "Data Privacy Policy",
+    "content": "We take your data privacy seriously. Your information is encrypted at rest and in transit. We do not sell your personal data to third parties. For more details, please read our full Privacy Policy on our website."
+  },
+  {
+    "title": "Contact Support",
+    "content": "If you need assistance, our support team is available 24/7. You can reach us via the live chat on our website, email at support@example.com, or by calling our toll-free number at 1-800-123-4567."
+  },
+  {
+    "title": "System Requirements",
+    "content": "Our platform is accessible via any modern web browser, including Chrome, Firefox, Safari, and Edge. For the best experience, we recommend keeping your browser updated to the latest version. A stable internet connection is required."
+  },
+  {
+    "title": "Refund Policy",
+    "content": "We offer a 30-day money-back guarantee for all paid plans. If you're not satisfied with our service, you can request a full refund within 30 days of your initial purchase by contacting our support team."
+  }
+]
