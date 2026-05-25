@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const apiBaseUrl = 'https://genai-assistant-088m.onrender.com';
     const chatContainer = document.getElementById('chat-container');
     const userInput = document.getElementById('user-input');
     const sendBtn = document.getElementById('send-btn');
@@ -173,7 +174,7 @@ document.addEventListener('DOMContentLoaded', () => {
         chatContainer.scrollTop = chatContainer.scrollHeight;
 
         try {
-            const response = await fetch('/api/chat', {
+            const response = await fetch(`${apiBaseUrl}/api/chat`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ sessionId: currentSessionId, message })
