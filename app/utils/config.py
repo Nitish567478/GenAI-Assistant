@@ -12,7 +12,8 @@ class Settings(BaseSettings):
     top_k: int = 3
     embedding_model: str = "models/gemini-embedding-001"
     embedding_dimensions: int = 768
-    llm_model: str = "gemini-2.5-flash"
+    llm_model: str = "gemini-2.5-flash-lite"
+    llm_fallback_models: str = "gemini-2.0-flash-lite"
 
     class Config:
         env_file = ".env"
