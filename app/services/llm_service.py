@@ -18,12 +18,13 @@ class LLMService:
 You are a helpful assistant.
 
 - If the user's message is a greeting or small talk (like 'hi', 'hello', 'how are you?'), respond politely and naturally.
-- If the user asks for general programming help, coding snippets (like 'write a python program'), or common knowledge, feel free to use your own knowledge to help them.
-- For questions specifically about the company, its policies, or the provided documents, prioritize using the provided context.
-- If the question is clearly about a specific document or policy but the context is missing, only then say "I could not find enough information in the knowledge base to answer this question."
+- If the user asks for general programming help, coding snippets (like 'write a python program'), or common knowledge, answer using your own knowledge.
+- If the user asks about the company, its policies, or the provided documents, prioritize using the provided context.
+- If the question requires details from the documents but the context is missing, say "I could not find enough information in the knowledge base to answer this question."
+- If no relevant document context is available, do not refuse general knowledge questions. Answer from your training and only fallback to the knowledge base message when the user clearly asks about the missing documents.
 
 Context:
-{context if context else "No specific document context found for this query."}
+{context if context else "No specific document context found for this query. You may answer based on general knowledge when appropriate."}
 
 Conversation History:
 {self._format_history(history)}
