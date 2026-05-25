@@ -12,6 +12,7 @@ class ChatResponse(BaseModel):
 
 class HealthResponse(BaseModel):
     status: str
+    details: Optional[List[str]] = None
 
 class DocumentChunk(BaseModel):
     id: str

@@ -1,3 +1,4 @@
+import logging
 from typing import List, Dict
 from app.services.embedding_service import EmbeddingService
 from app.services.llm_service import LLMService
@@ -32,27 +33,35 @@ class RAGService:
         self.session_manager = SessionManager()
 
     async def answer_question(self, session_id: str, question: str):
-        # 1. Embed query
-        query_embedding = self.embedding_service.get_embedding(question)
-        
-        # 2. Retrieve top-k
-        results = self.vector_store.search(
-            query_embedding, 
-            top_k=settings.top_k, 
-            threshold=settings.similarity_threshold
-        )
-        
-        # 3. Build context
-        context = "\n\n".join([f"Source: {chunk.title}\n{chunk.content}" for chunk, score in results])
-        
-        # 4. Get history
-        history = self.session_manager.get_history(session_id)
-        
-        # 5. Generate response
-        reply, tokens_used = self.llm_service.generate_response(context, history, question)
-        
-        # 6. Update history
-        self.session_manager.add_message(session_id, "user", question)
-        self.session_manager.add_message(session_id, "assistant", reply)
-        
-        return reply, tokens_used, len(results)
+        try:
+            # 1. Embed query
+            logging.info(f"Embedding query: {question[:50]}...")
+            query_embedding = self.embedding_service.get_embedding(question)
+            
+            # 2. Retrieve top-k
+            logging.info("Searching vector store...")
+            results = self.vector_store.search(
+                query_embedding, 
+                top_k=settings.top_k, 
+                threshold=settings.similarity_threshold
+            )
+            
+            # 3. Build context
+            context = "\n\n".join([f"Source: {chunk.title}\n{chunk.content}" for chunk, score in results])
+            
+            # 4. Get history
+            history = self.session_manager.get_history(session_id)
+            
+            # 5. Generate response
+            logging.info("Generating LLM response...")
+            reply, tokens_used = self.llm_service.generate_response(context, history, question)
+            
+            # 6. Update history
+            self.session_manager.add_message(session_id, "user", question)
+            self.session_manager.add_message(session_id, "assistant", reply)
+            
+            logging.info("Response generated successfully.")
+            return reply, tokens_used, len(results)
+        except Exception as e:
+            logging.error(f"Error in RAGService: {str(e)}")
+            raise e

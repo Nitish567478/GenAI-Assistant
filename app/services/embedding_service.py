@@ -12,7 +12,8 @@ class EmbeddingService:
         result = genai.embed_content(
             model=self.model,
             content=text,
-            task_type="retrieval_query"
+            task_type="retrieval_query",
+            output_dimensionality=settings.embedding_dimensions,
         )
         return result['embedding']
 
@@ -20,6 +21,17 @@ class EmbeddingService:
         result = genai.embed_content(
             model=self.model,
             content=texts,
-            task_type="retrieval_document"
+            task_type="retrieval_document",
+            output_dimensionality=settings.embedding_dimensions,
         )
-        return result['embedding']
+        return self._extract_batch_embeddings(result)
+
+    def _extract_batch_embeddings(self, result):
+        if 'embeddings' in result:
+            return result['embeddings']
+
+        embeddings = result.get('embedding')
+        if isinstance(embeddings, list) and embeddings and isinstance(embeddings[0], list):
+            return embeddings
+
+        raise KeyError(f"Could not find batch embeddings in response keys: {list(result.keys())}")

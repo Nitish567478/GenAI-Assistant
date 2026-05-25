@@ -30,10 +30,19 @@ Conversation History:
 Question:
 {user_question}
 """
-        response = self.model.generate_content(prompt, generation_config=self.config)
-        
-        # In a real production app, we'd handle safety ratings and other attributes
-        return response.text, response.usage_metadata.total_token_count if hasattr(response, 'usage_metadata') else 0
+        try:
+            response = self.model.generate_content(prompt, generation_config=self.config)
+            
+            if not response.candidates:
+                return "I'm sorry, I couldn't generate a response. The request might have been blocked by safety filters.", 0
+
+            # In a real production app, we'd handle safety ratings and other attributes
+            reply = response.text if response.candidates[0].content.parts else "I'm sorry, I couldn't generate a response."
+            tokens_used = response.usage_metadata.total_token_count if hasattr(response, 'usage_metadata') else 0
+            
+            return reply, tokens_used
+        except Exception as e:
+            raise e
 
     def _format_history(self, history: List[Dict[str, str]]) -> str:
         formatted = ""

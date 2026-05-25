@@ -26,20 +26,30 @@ app.add_middleware(
 
 @app.on_event("startup")
 async def startup_event():
-    # Initialize services
-    api.embedding_service = EmbeddingService()
-    api.llm_service = LLMService()
-    
-    # Load and index documents
-    docs_path = os.path.join(os.getcwd(), "docs.json")
-    api.vector_store = VectorStore.load_from_json(docs_path, api.embedding_service)
-    
-    api.rag_service = RAGService(
-        api.embedding_service, 
-        api.llm_service, 
-        api.vector_store
-    )
-    print("Application initialized and documents indexed.")
+    try:
+        api.startup_error = None
+        # Initialize services
+        api.embedding_service = EmbeddingService()
+        api.llm_service = LLMService()
+        
+        # Load and index documents
+        docs_path = os.path.join(os.getcwd(), "docs.json")
+        if not os.path.exists(docs_path):
+            # Fallback for different working directories
+            docs_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "docs.json")
+            
+        print(f"Loading documents from: {docs_path}")
+        api.vector_store = VectorStore.load_from_json(docs_path, api.embedding_service)
+        
+        api.rag_service = RAGService(
+            api.embedding_service, 
+            api.llm_service, 
+            api.vector_store
+        )
+        print("Application initialized and documents indexed successfully.")
+    except Exception as e:
+        api.startup_error = str(e)
+        print(f"CRITICAL ERROR DURING STARTUP: {api.startup_error}")
 
 # Include routes
 app.include_router(api.router, prefix="/api")
